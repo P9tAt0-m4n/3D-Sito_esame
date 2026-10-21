@@ -1,0 +1,90 @@
+/* ===== MENU ===== */
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  background: var(--colore-scuro);
+}
+
+.menu a {
+  padding: 8px 16px;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.menu a:hover,
+.menu a.attivo {
+  background: var(--colore-principale);
+}
+
+/* ===== PAGINA CV ===== */
+#cv {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Ogni blocco è una card, come nella Home */
+.card-cv {
+  background: var(--colore-card);
+  border: 1px solid var(--colore-bordo);
+  border-radius: 10px;
+  padding: 8px 20px 20px;
+}
+
+.card-cv h2 {
+  color: var(--colore-principale);
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--colore-bordo);
+}
+
+/* Informazioni personali: nome + valore */
+.cv-dato {
+  display: flex;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--colore-bordo);
+}
+
+.cv-nome {
+  min-width: 9rem;
+  color: var(--colore-principale);
+}
+
+/* Istruzione ed esperienze */
+.cv-voce {
+  margin-bottom: 16px;
+  padding-left: 14px;
+  border-left: 4px solid var(--colore-principale);
+}
+
+.cv-titolo {
+  margin: 0 0 4px;
+  font-size: 1.2rem;
+}
+
+.cv-sottotitolo {
+  margin: 0 0 8px;
+  font-style: italic;
+}
+
+/* Periodo come piccola etichetta bordeaux */
+.cv-periodo {
+  display: inline-block;
+  margin: 0 0 8px;
+  padding: 3px 10px;
+  background: var(--colore-principale);
+  color: white;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.cv-testo {
+  margin: 0;
+  line-height: 1.4;
+}

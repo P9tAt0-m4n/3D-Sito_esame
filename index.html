@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <!-- Fa adattare la pagina allo schermo del telefono -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Il mio catalogo di oggetti di casa</title>
+  <!-- Collegamento al file degli stili -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Font da Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Menu: uguale in index.html, cv.html e stage.html -->
+    <nav class="menu">
+      <a href="index.html">Home</a>
+      <a href="cv.html">CV</a>
+      <a href="stage.html">Stage</a>
+    </nav>
+
+  <!-- Intestazione della pagina -->
+  <header>
+    <h1>Il mio catalogo di oggetti di casa</h1>
+    <p>Qui trovi una raccolta degli oggetti che abbiamo in casa, con foto e descrizione.</p>
+  </header>
+
+  <!-- Qui lo script inserirà le card -->
+  <main id="catalogo">
+    Sto caricando gli oggetti...
+  </main>
+
+  <!-- Piè di pagina -->
+  <footer>
+    <p>Sito creato da [Nicola]</p>
+  </footer>
+
+  <!-- Prima la libreria PapaParse, poi il nostro script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>

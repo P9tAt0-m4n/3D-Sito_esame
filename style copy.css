@@ -1,0 +1,398 @@
+/* ===== VARIABILI: cambia qui colori, font e aspetto delle card ===== */
+:root {
+  --colore-principale: #6b3e26;  /* marrone noce (bottoni, header) */
+  --colore-scuro: #4a2917;       /* marrone scuro (hover e sfumatura header) */
+  --colore-oro: #b8923a;         /* oro ottone (cornici, etichette) */
+  --colore-sfondo: #f3ead8;      /* sfondo pagina: carta antica */
+  --colore-card: #fffaf0;        /* sfondo card */
+  --colore-testo: #3a2a20;
+  --colore-bordo: #d8c7a3;
+  --colore-grigio: #e6dac0;      /* immagine mancante */
+  --font: Georgia, 'Times New Roman', serif;                    /* testi */
+  --font-titoli: 'Playfair Display', Georgia, serif;            /* titoli */
+  --raggio-card: 4px;                                           /* angoli card */
+  --spazio-card: 28px;                                          /* spazio tra le card */
+  --ombra-card: 0 2px 8px rgba(74, 41, 23, 0.15);               /* ombra leggera */
+  --ombra-card-hover: 0 8px 20px rgba(74, 41, 23, 0.28);        /* ombra al passaggio del mouse */
+}
+
+/* ===== BASE ===== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--colore-testo);
+  background: var(--colore-sfondo);
+}
+
+/* Font dei titoli */
+h1,
+h2 {
+  font-family: var(--font-titoli);
+}
+
+/* ===== HEADER E FOOTER ===== */
+header {
+  background: var(--colore-principale);   /* colore di riserva */
+  background: linear-gradient(135deg, var(--colore-principale), var(--colore-scuro));
+  color: #f6ecd6;
+  text-align: center;
+  padding: 56px 16px;
+  border-bottom: 6px double var(--colore-oro);   /* filetto dorato */
+}
+
+/* Titolo grande (si adatta allo schermo: da 2rem a 3.5rem) */
+header h1 {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  line-height: 1.15;
+  letter-spacing: 1px;
+}
+
+/* Presentazione centrata, in corsivo */
+header p {
+  margin: 0 auto;
+  max-width: 600px;
+  font-size: 1.1rem;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+footer {
+  text-align: center;
+  font-style: italic;
+  padding: 16px;
+  border-top: 3px double var(--colore-oro);
+}
+
+/* ===== GRIGLIA: 1 colonna su telefono ===== */
+#catalogo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spazio-card);
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* 3 colonne su schermi larghi */
+@media (min-width: 800px) {
+  #catalogo {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ===== CARD ===== */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--colore-card);
+  border: 4px double var(--colore-oro);         /* doppia cornice dorata */
+  border-radius: var(--raggio-card);
+  box-shadow: var(--ombra-card);
+  overflow: hidden;
+  padding-bottom: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Effetto al passaggio del mouse: la card si alza un po' */
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ombra-card-hover);
+}
+
+/* Immagine alta 180px, riempie lo spazio senza deformarsi */
+.card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  border-bottom: 2px solid var(--colore-oro);
+}
+
+/* Foto leggermente seppia, come una vecchia fotografia */
+img.card-img {
+  filter: sepia(0.35);
+}
+
+/* Se l'immagine manca (div): sfondo grigio chiaro */
+div.card-img {
+  background: var(--colore-grigio);
+}
+
+.card-titolo {
+  margin: 14px 16px 8px;
+  font-size: 1.2rem;
+  color: var(--colore-principale);
+}
+
+/* Etichetta come cartellino da negozio */
+.card-categoria {
+  align-self: flex-start;
+  margin: 0 16px 8px;
+  padding: 3px 10px;
+  background: var(--colore-oro);
+  color: var(--colore-testo);
+  border-radius: 2px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.card-testo {
+  margin: 0 16px 16px;
+  line-height: 1.5;
+}
+
+/* Link come bottone, sempre in fondo alla card */
+.card-link {
+  margin: auto 16px 0;
+  padding: 10px;
+  background: var(--colore-principale);
+  color: #f6ecd6;
+  border: 1px solid var(--colore-oro);
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 0.85rem;
+  border-radius: 2px;
+}
+
+.card-link:hover {
+  background: var(--colore-scuro);
+}
+
+
+
+/* ===== MENU (barra in alto, stile noce e oro) ===== */
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  background: var(--colore-scuro);
+  border-bottom: 1px solid var(--colore-oro);
+}
+
+.menu a {
+  padding: 8px 18px;
+  color: #f6ecd6;
+  font-size: 0.85rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border-bottom: 2px solid transparent;
+}
+
+.menu a:hover,
+.menu a.attivo {
+  border-bottom-color: var(--colore-oro);
+}
+
+/* ===== PAGINA CV ===== */
+#cv {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spazio-card);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* Ogni blocco è una card con doppia cornice dorata, come nella Home */
+.card-cv {
+  background: var(--colore-card);
+  border: 4px double var(--colore-oro);
+  border-radius: var(--raggio-card);
+  box-shadow: var(--ombra-card);
+  padding: 8px 24px 24px;
+}
+
+.card-cv h2 {
+  color: var(--colore-principale);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--colore-oro);
+}
+
+/* Informazioni personali: nome + valore, con filetto tratteggiato */
+.cv-dato {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dotted var(--colore-bordo);
+}
+
+.cv-nome {
+  min-width: 9rem;
+  color: var(--colore-principale);
+}
+
+/* Istruzione ed esperienze: doppia linea dorata a sinistra */
+.cv-voce {
+  margin-bottom: 20px;
+  padding-left: 16px;
+  border-left: 4px double var(--colore-oro);
+}
+
+.cv-titolo {
+  margin: 0 0 4px;
+  font-family: var(--font-titoli);
+  font-size: 1.2rem;
+  color: var(--colore-principale);
+}
+
+.cv-sottotitolo {
+  margin: 0 0 8px;
+  font-style: italic;
+}
+
+/* Periodo come cartellino dorato */
+.cv-periodo {
+  display: inline-block;
+  margin: 0 0 8px;
+  padding: 3px 10px;
+  background: var(--colore-oro);
+  color: var(--colore-testo);
+  border-radius: 2px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.cv-testo {
+  margin: 0;
+  line-height: 1.5;
+}
+
+
+
+/* ===== PAGINA STAGE ===== */
+main h1 {
+  text-align: center;
+  color: var(--colore-principale);
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  margin: 32px 16px 0;
+}
+
+#stage-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* Un blocco = card + relazione */
+.stage-blocco {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Card con doppia cornice dorata, come nella Home */
+.stage-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--colore-card);
+  border: 4px double var(--colore-oro);
+  border-radius: var(--raggio-card);
+  box-shadow: var(--ombra-card);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Effetto al passaggio del mouse: la card si alza un po' */
+.stage-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ombra-card-hover);
+}
+
+/* Immagine con filetto dorato e leggero effetto seppia */
+.stage-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  border-bottom: 2px solid var(--colore-oro);
+  filter: sepia(0.35);
+}
+
+.stage-card-testo {
+  padding: 16px 24px 24px;
+}
+
+.stage-card-testo h2 {
+  margin: 0 0 10px;
+  color: var(--colore-principale);
+  font-size: 1.5rem;
+}
+
+.stage-card-testo p {
+  margin: 0 0 6px;
+  line-height: 1.5;
+}
+
+/* "Di cosa si occupa" con filetto dorato sotto */
+.stage-card-testo h3 {
+  margin: 18px 0 10px;
+  padding-bottom: 6px;
+  font-family: var(--font-titoli);
+  font-size: 1.05rem;
+  color: var(--colore-principale);
+  border-bottom: 1px solid var(--colore-oro);
+}
+
+.stage-card-testo ul {
+  margin: 0;
+  padding-left: 22px;
+  line-height: 1.6;
+}
+
+.stage-card-testo li::marker {
+  color: var(--colore-oro);
+}
+
+/* Su schermi larghi: immagine a sinistra, testo a destra */
+@media (min-width: 800px) {
+  .stage-card {
+    flex-direction: row;
+  }
+
+  .stage-card img {
+    width: 300px;
+    height: auto;
+    min-height: 220px;
+    border-bottom: none;
+    border-right: 2px solid var(--colore-oro);
+  }
+
+  .stage-card-testo {
+    flex: 1;
+  }
+}
+
+/* Titolo "Relazione" */
+.stage-blocco > h3 {
+  margin: 10px 0 0;
+  padding-bottom: 8px;
+  font-family: var(--font-titoli);
+  font-size: 1.4rem;
+  color: var(--colore-principale);
+  border-bottom: 1px solid var(--colore-oro);
+}
+
+/* Testo della relazione: mantiene a capo e paragrafi */
+.stage-relazione {
+  margin: 0;
+  padding: 16px 20px;
+  background: var(--colore-card);
+  border-left: 4px double var(--colore-oro);
+  border-radius: var(--raggio-card);
+  line-height: 1.6;
+  white-space: pre-line;
+}

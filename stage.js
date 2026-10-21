@@ -38,7 +38,7 @@ function creaBlocco(riga) {
 
   if (immagine) {
     const img = document.createElement("img");
-    img.src = "img/" + immagine; // il file sta nella cartella img/
+    img.src = "Img/" + immagine; // il file sta nella cartella Img/
     img.alt = azienda;
     card.appendChild(img);
   }

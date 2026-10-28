@@ -2,42 +2,52 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <!-- Fa adattare la pagina allo schermo del telefono -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Il mio catalogo di oggetti di casa</title>
-  <!-- Collegamento al file degli stili -->
+  <title>Portfolio</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Font da Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <!-- Menu: uguale in index.html, cv.html e stage.html -->
-    <nav class="menu">
-      <a href="index.html">Home</a>
-      <a href="cv.html">CV</a>
-      <a href="stage.html">Stage</a>
-    </nav>
+  <nav class="menu">
+    <a href="index.html" class="attivo">Home</a>
+    <a href="cv.html">CV</a>
+    <a href="stage.html">Stage</a>
+  </nav>
 
-  <!-- Intestazione della pagina -->
+  <!-- Presentazione: nome, qualifica, testo e foto arrivano dal foglio -->
   <header>
-    <h1>Il mio catalogo di oggetti di casa</h1>
-    <p>Qui trovi una raccolta degli oggetti che abbiamo in casa, con foto e descrizione.</p>
+    <img id="foto" class="foto-profilo" alt="" hidden>
+    <h1 id="nome"></h1>
+    <p id="qualifica"></p>
+    <p id="presentazione" class="presentazione"></p>
   </header>
 
-  <!-- Qui lo script inserirà le card -->
-  <main id="catalogo">
-    Sto caricando gli oggetti...
+  <main>
+    <!-- Passioni -->
+    <section>
+      <h2 class="titolo-sezione">Passioni</h2>
+      <div id="passioni" class="griglia"></div>
+    </section>
+
+    <!-- Competenze -->
+    <section>
+      <h2 class="titolo-sezione">Cosa so fare</h2>
+      <div id="competenze" class="competenze"></div>
+    </section>
   </main>
 
-  <!-- Piè di pagina -->
-  <footer>
-    <p>Sito creato da [Nicola]</p>
+  <!-- Footer: sostituisci i dati tra parentesi quadre con i tuoi -->
+  <footer class="footer-contatti">
+    <div>
+      <p>Indirizzo: [il tuo indirizzo]</p>
+      <p>Email: [la tua email]</p>
+      <p>Cellulare: [il tuo numero]</p>
+    </div>
+    <!-- Metti il file del logo dentro la cartella Img con questo nome -->
+    <img src="Img/logo.png" alt="Logo Immaginazione e Lavoro" class="logo-footer">
   </footer>
 
-  <!-- Prima la libreria PapaParse, poi il nostro script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="script.js"></script>
 

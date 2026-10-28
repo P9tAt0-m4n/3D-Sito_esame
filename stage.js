@@ -1,90 +1,128 @@
-// Link CSV del foglio: stesso ID della Home, cambia solo gid (numero del tab "Stage")
-const URL_STAGE = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTOTepoy8TlXF4SGrug2IsFZp0cqAs1azldEJpm-3bSRLuD0BbIWYqCjkjco-xdJYNH2VTCdchOS7lr/pub?gid=211737495&single=true&output=csv";
+// ===== Foglio Google: leggo il tab chiamato "Stage" =====
+const ID_FOGLIO = "1MAJD8MCsRLK6TxwnfN4JeH69zjD938KoM3-3CX_I7aA";
+const URL_STAGE =
+  "https://docs.google.com/spreadsheets/d/" +
+  ID_FOGLIO +
+  "/gviz/tq?tqx=out:csv&headers=1&sheet=Stage";
 
-const contenitore = document.getElementById("stage-lista");
+// Cartella delle immagini (stessa scrittura del nome della cartella)
+const CARTELLA_IMG = "Img/";
 
-// Toglie gli spazi; se la cella è vuota restituisce ""
+const lista = document.getElementById("stage-lista");
+
+// Toglie gli spazi in più da una cella
 function pulisci(valore) {
   return (valore || "").trim();
 }
 
-// Crea un elemento con il testo (textContent, mai innerHTML)
-function creaElemento(tag, testo, classe) {
+// Crea un elemento con del testo, solo se il testo non è vuoto
+function creaTesto(tag, classe, testo) {
+  if (testo === "") {
+    return null;
+  }
   const el = document.createElement(tag);
+  if (classe !== "") {
+    el.className = classe;
+  }
   el.textContent = testo;
-  if (classe) el.className = classe;
   return el;
 }
 
-// Crea il blocco di un singolo stage (una riga del foglio)
-function creaBlocco(riga) {
-  const azienda = pulisci(riga.azienda);
-  const luogo = pulisci(riga.luogo);
-  const immagine = pulisci(riga.immagine);
-  const settore = pulisci(riga.settore);
-  const relazione = pulisci(riga.relazione);
-  // Punti separati da ";" -> li divido, tolgo gli spazi e scarto quelli vuoti
-  const attivita = pulisci(riga.attivita)
+// Crea la card con immagine, azienda, luogo, settore e attività
+function creaCard(riga) {
+  const card = document.createElement("article");
+  card.className = "stage-card";
+
+  // Immagine solo se la cella non è vuota
+  const nomeImg = pulisci(riga.immagine);
+  if (nomeImg !== "") {
+    const img = document.createElement("img");
+    img.src = CARTELLA_IMG + nomeImg;
+    img.alt = pulisci(riga.azienda);
+    card.appendChild(img);
+  }
+
+  const testo = document.createElement("div");
+  testo.className = "stage-card-testo";
+
+  // Nome dell'azienda, luogo e settore (solo se presenti)
+  const campi = [
+    creaTesto("h2", "stage-azienda", pulisci(riga.azienda)),
+    creaTesto("p", "stage-luogo", pulisci(riga.luogo)),
+    creaTesto("p", "stage-settore", pulisci(riga.settore))
+  ];
+  campi.forEach(function (campo) {
+    if (campo !== null) {
+      testo.appendChild(campo);
+    }
+  });
+
+  // Attività: i punti sono separati da ";"
+  const punti = pulisci(riga.attivita)
     .split(";")
     .map(function (p) { return p.trim(); })
     .filter(function (p) { return p !== ""; });
 
+  if (punti.length > 0) {
+    const titoloElenco = document.createElement("h3");
+    titoloElenco.textContent = "Di cosa si occupa";
+    testo.appendChild(titoloElenco);
+
+    const ul = document.createElement("ul");
+    punti.forEach(function (punto) {
+      const li = document.createElement("li");
+      li.textContent = punto;
+      ul.appendChild(li);
+    });
+    testo.appendChild(ul);
+  }
+
+  card.appendChild(testo);
+  return card;
+}
+
+// Crea un blocco: card + relazione
+function creaBlocco(riga) {
   const blocco = document.createElement("section");
   blocco.className = "stage-blocco";
 
-  // --- Card ---
-  const card = document.createElement("div");
-  card.className = "stage-card";
+  blocco.appendChild(creaCard(riga));
 
-  if (immagine) {
-    const img = document.createElement("img");
-    img.src = "Img/" + immagine; // il file sta nella cartella Img/
-    img.alt = azienda;
-    card.appendChild(img);
-  }
+  // Relazione solo se c'è del testo
+  const relazione = pulisci(riga.relazione);
+  if (relazione !== "") {
+    const titolo = document.createElement("h3");
+    titolo.textContent = "Relazione";
+    blocco.appendChild(titolo);
 
-  const corpo = document.createElement("div");
-  corpo.className = "stage-card-testo";
-
-  if (azienda) corpo.appendChild(creaElemento("h2", azienda));
-  if (luogo) corpo.appendChild(creaElemento("p", "Luogo: " + luogo));
-  if (settore) corpo.appendChild(creaElemento("p", "Settore: " + settore));
-
-  // Elenco puntato delle attività
-  if (attivita.length > 0) {
-    corpo.appendChild(creaElemento("h3", "Di cosa si occupa"));
-    const ul = document.createElement("ul");
-    attivita.forEach(function (punto) {
-      ul.appendChild(creaElemento("li", punto));
-    });
-    corpo.appendChild(ul);
-  }
-
-  card.appendChild(corpo);
-  blocco.appendChild(card);
-
-  // --- Relazione (a capo mantenuti con il CSS white-space: pre-line) ---
-  if (relazione) {
-    blocco.appendChild(creaElemento("h3", "Relazione"));
-    blocco.appendChild(creaElemento("p", relazione, "stage-relazione"));
+    const p = document.createElement("p");
+    p.className = "stage-relazione"; // il CSS mantiene gli a capo
+    p.textContent = relazione;
+    blocco.appendChild(p);
   }
 
   return blocco;
 }
 
-// Legge il foglio con PapaParse e crea un blocco per ogni riga
+// Legge il foglio e crea un blocco per ogni riga
 Papa.parse(URL_STAGE, {
   download: true,
-  header: true,          // la prima riga contiene i nomi delle colonne
+  header: true,
   skipEmptyLines: true,
+  // Nomi delle colonne senza spazi e in minuscolo
+  transformHeader: function (nome) {
+    return nome.trim().toLowerCase();
+  },
   complete: function (risultato) {
     risultato.data.forEach(function (riga) {
-      // salto le righe senza azienda
-      if (pulisci(riga.azienda) === "") return;
-      contenitore.appendChild(creaBlocco(riga));
+      lista.appendChild(creaBlocco(riga));
     });
+
+    if (lista.children.length === 0) {
+      lista.textContent = "Non trovo dati nel tab Stage del foglio.";
+    }
   },
   error: function () {
-    contenitore.textContent = "Non riesco a leggere il foglio.";
+    lista.textContent = "Non riesco a leggere il foglio.";
   }
 });

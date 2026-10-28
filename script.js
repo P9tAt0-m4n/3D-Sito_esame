@@ -1,107 +1,112 @@
-// ===== UNICA RIGA DA MODIFICARE =====
-const ID_FOGLIO = "1vdUfkxYPdjIaX9XExCHPPzXzkdFmA0zZhJX2YEG_SFw";
+// ===== Foglio Google pubblicato in formato CSV (tab della Home) =====
+const URL_FOGLIO =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vTOTepoy8TlXF4SGrug2IsFZp0cqAs1azldEJpm-3bSRLuD0BbIWYqCjkjco-xdJYNH2VTCdchOS7lr/pub?gid=0&single=true&output=csv";
 
-const catalogo = document.getElementById("catalogo");
-const MESSAGGIO_ERRORE =
-  "Non riesco a leggere il foglio. Controlla che l'ID sia giusto e che il foglio sia condiviso con 'Chiunque abbia il link'.";
+// Cartella delle immagini (stessa scrittura del nome della cartella)
+const CARTELLA_IMG = "Img/";
 
-// Mostra un messaggio al posto delle card
-function mostraMessaggio(testo) {
-  catalogo.textContent = testo;
+// Prende il testo di una cella e toglie gli spazi in più
+function pulisci(valore) {
+  return (valore || "").trim();
 }
 
-// Crea una card per una riga del foglio
-function creaCard(riga) {
-  const nome = (riga.nome || "").trim();
-  const descrizione = (riga.descrizione || "").trim();
-  const immagine = (riga.immagine || "").trim();
-  const categoria = (riga.categoria || "").trim();
-  const link = (riga.link || "").trim();
+// Mostra la presentazione (nome, qualifica, testo, foto)
+function mostraPresentazione(riga) {
+  document.getElementById("nome").textContent = pulisci(riga.titolo);
+  document.getElementById("qualifica").textContent = pulisci(riga.sottotitolo);
+  document.getElementById("presentazione").textContent = pulisci(riga.testo);
 
+  // La foto si mostra solo se la cella non è vuota
+  const nomeFoto = pulisci(riga.immagine);
+  if (nomeFoto !== "") {
+    const foto = document.getElementById("foto");
+    foto.src = CARTELLA_IMG + nomeFoto;
+    foto.alt = pulisci(riga.titolo);
+    foto.hidden = false;
+  }
+}
+
+// Crea una card per una passione
+function creaCardPassione(riga) {
   const card = document.createElement("article");
   card.className = "card";
 
-  // Immagine: img se c'è un indirizzo http, altrimenti div grigio
-  if (immagine.startsWith("http")) {
+  // Immagine solo se presente
+  const nomeImg = pulisci(riga.immagine);
+  if (nomeImg !== "") {
     const img = document.createElement("img");
     img.className = "card-img";
-    img.src = immagine;
-    img.alt = nome;
+    img.src = CARTELLA_IMG + nomeImg;
+    img.alt = pulisci(riga.titolo);
     card.appendChild(img);
-  } else {
-    const vuoto = document.createElement("div");
-    vuoto.className = "card-img";
-    card.appendChild(vuoto);
   }
 
   // Titolo
-  const titolo = document.createElement("h2");
+  const titolo = document.createElement("h3");
   titolo.className = "card-titolo";
-  titolo.textContent = nome;
+  titolo.textContent = pulisci(riga.titolo);
   card.appendChild(titolo);
 
-  // Categoria (solo se presente)
-  if (categoria !== "") {
-    const etichetta = document.createElement("span");
-    etichetta.className = "card-categoria";
-    etichetta.textContent = categoria;
-    card.appendChild(etichetta);
-  }
-
-  // Descrizione
-  const testo = document.createElement("p");
-  testo.className = "card-testo";
-  testo.textContent = descrizione;
-  card.appendChild(testo);
-
-  // Bottone "Apri" (solo se il link inizia con http)
-  if (link.startsWith("http")) {
-    const bottone = document.createElement("a");
-    bottone.className = "card-link";
-    bottone.href = link;
-    bottone.target = "_blank";
-    bottone.rel = "noopener"; // sicurezza per i link esterni
-    bottone.textContent = "Apri";
-    card.appendChild(bottone);
+  // Descrizione solo se presente
+  const descrizione = pulisci(riga.testo);
+  if (descrizione !== "") {
+    const testo = document.createElement("p");
+    testo.className = "card-testo";
+    testo.textContent = descrizione;
+    card.appendChild(testo);
   }
 
   return card;
 }
 
-// Legge il foglio e crea le card
-function caricaCatalogo() {
-  // Controllo: l'ID è vuoto o ancora quello di esempio?
-  if (ID_FOGLIO === "" || ID_FOGLIO.startsWith("INCOLLA")) {
-    mostraMessaggio(MESSAGGIO_ERRORE);
-    return;
-  }
+// Crea una barra per una competenza (livello da 0 a 100)
+function creaCompetenza(riga) {
+  const livello = Number(pulisci(riga.livello)) || 0;
 
-  const url =
-    "https://docs.google.com/spreadsheets/d/" +
-    ID_FOGLIO +
-    "/gviz/tq?tqx=out:csv&headers=1";
+  const blocco = document.createElement("div");
+  blocco.className = "competenza";
 
-  Papa.parse(url, {
-    download: true,
-    header: true,
-    skipEmptyLines: true,
-    complete: function (risultato) {
-      // Se manca la colonna "nome" il foglio non è stato letto bene
-      const colonne = risultato.meta.fields || [];
-      if (!colonne.includes("nome") || risultato.data.length === 0) {
-        mostraMessaggio(MESSAGGIO_ERRORE);
-        return;
-      }
+  // Nome e percentuale
+  const nome = document.createElement("p");
+  nome.className = "competenza-nome";
+  nome.textContent = pulisci(riga.titolo) + " - " + livello + "%";
+  blocco.appendChild(nome);
 
-      catalogo.textContent = ""; // toglie "Sto caricando gli oggetti..."
-      risultato.data.forEach(function (riga) {
-        catalogo.appendChild(creaCard(riga));
-      });
-    },
-    error: function () {
-      mostraMessaggio(MESSAGGIO_ERRORE);
-    }
-  });
+  // Barra grigia con dentro la barra colorata
+  const barra = document.createElement("div");
+  barra.className = "barra";
+  const riempimento = document.createElement("div");
+  riempimento.className = "barra-livello";
+  riempimento.style.width = livello + "%";
+  barra.appendChild(riempimento);
+  blocco.appendChild(barra);
+
+  return blocco;
 }
 
-caricaCatalogo();
+// Legge il foglio e riempie la pagina
+Papa.parse(URL_FOGLIO, {
+  download: true,
+  header: true,
+  skipEmptyLines: true,
+  complete: function (risultato) {
+    const passioni = document.getElementById("passioni");
+    const competenze = document.getElementById("competenze");
+
+    risultato.data.forEach(function (riga) {
+      const sezione = pulisci(riga.sezione);
+
+      if (sezione === "presentazione") {
+        mostraPresentazione(riga);
+      } else if (sezione === "passione") {
+        passioni.appendChild(creaCardPassione(riga));
+      } else if (sezione === "competenza") {
+        competenze.appendChild(creaCompetenza(riga));
+      }
+    });
+  },
+  error: function () {
+    document.getElementById("nome").textContent =
+      "Non riesco a leggere il foglio.";
+  }
+});

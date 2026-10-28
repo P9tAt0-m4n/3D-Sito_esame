@@ -1,58 +1,156 @@
-// ===== Pagina CV: legge il tab "CV" del Google Foglio =====
+// ===== Foglio Google: leggo il tab chiamato "CV" =====
+const ID_FOGLIO = "1MAJD8MCsRLK6TxwnfN4JeH69zjD938KoM3-3CX_I7aA";
+const URL_CV =
+  "https://docs.google.com/spreadsheets/d/" +
+  ID_FOGLIO +
+  "/gviz/tq?tqx=out:csv&headers=1&sheet=CV";
 
-// ATTENZIONE: metti qui lo STESSO link CSV che usa la tua Home (stesso ID del foglio).
-// Cambia solo il gid, se il tab "CV" ne ha uno diverso da 0.
-const URL_CV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSPYUotiG_i-uxk1h3w7LfGx74eU7VSqE_dKvPfhTpdiFZ831EcsyyiHPRwUCK_GXjvhBp23wb0J7sx/pub?gid=0&single=true&output=csv";
+const contenitore = document.getElementById("cv");
 
-// Crea un elemento con del testo (textContent, mai innerHTML) e lo aggiunge al padre
-function aggiungi(padre, tag, classe, testo) {
-  if (!testo || testo.trim() === "") return; // cella vuota: non la mostro
+// Toglie gli spazi in più da una cella
+function pulisci(valore) {
+  return (valore || "").trim();
+}
+
+// Crea un elemento con del testo, solo se il testo non è vuoto
+function creaTesto(tag, classe, testo) {
+  if (testo === "") {
+    return null;
+  }
   const el = document.createElement(tag);
   el.className = classe;
   el.textContent = testo;
-  padre.appendChild(el);
+  return el;
 }
 
-// Mostra una riga "dati": nome dell'informazione + valore
-function mostraDato(riga, contenitore) {
-  const voce = document.createElement("div");
-  voce.className = "cv-dato";
-  aggiungi(voce, "strong", "cv-nome", riga.titolo);
-  aggiungi(voce, "span", "cv-valore", riga.testo);
-  contenitore.appendChild(voce);
+// Una riga delle informazioni personali: nome + valore
+function creaDato(riga) {
+  const nome = pulisci(riga.titolo);
+  const valore = pulisci(riga.testo);
+  if (nome === "" && valore === "") {
+    return null;
+  }
+
+  const div = document.createElement("div");
+  div.className = "cv-dato";
+
+  const spanNome = document.createElement("span");
+  spanNome.className = "cv-nome";
+  spanNome.textContent = nome;
+  div.appendChild(spanNome);
+
+  const spanValore = document.createElement("span");
+  spanValore.className = "cv-valore";
+  spanValore.textContent = valore;
+  div.appendChild(spanValore);
+
+  return div;
 }
 
-// Mostra una riga "istruzione" o "esperienza": titolo, sottotitolo, periodo, testo
-function mostraVoce(riga, contenitore) {
-  const voce = document.createElement("article");
-  voce.className = "cv-voce";
-  aggiungi(voce, "h3", "cv-titolo", riga.titolo);
-  aggiungi(voce, "p", "cv-sottotitolo", riga.sottotitolo);
-  aggiungi(voce, "p", "cv-periodo", riga.periodo);
-  aggiungi(voce, "p", "cv-testo", riga.testo);
-  contenitore.appendChild(voce);
+// Una voce della linea del tempo (istruzione o esperienza)
+function creaVoce(riga) {
+  const div = document.createElement("div");
+  div.className = "cv-voce";
+
+  // Aggiungo solo i campi che non sono vuoti (prima il periodo)
+  const campi = [
+    creaTesto("p", "cv-periodo", pulisci(riga.periodo)),
+    creaTesto("h3", "cv-titolo", pulisci(riga.titolo)),
+    creaTesto("p", "cv-sottotitolo", pulisci(riga.sottotitolo)),
+    creaTesto("p", "cv-testo", pulisci(riga.testo))
+  ];
+  campi.forEach(function (campo) {
+    if (campo !== null) {
+      div.appendChild(campo);
+    }
+  });
+
+  return div;
 }
 
-// Scarico il foglio e riempio i tre blocchi
+// Tessera con le informazioni personali
+function creaTessera(righe) {
+  const tessera = document.createElement("section");
+  tessera.className = "cv-tessera";
+
+  const h2 = document.createElement("h2");
+  h2.textContent = "Informazioni personali";
+  tessera.appendChild(h2);
+
+  const griglia = document.createElement("div");
+  griglia.className = "cv-dati";
+  righe.forEach(function (riga) {
+    const dato = creaDato(riga);
+    if (dato !== null) {
+      griglia.appendChild(dato);
+    }
+  });
+  tessera.appendChild(griglia);
+
+  return tessera;
+}
+
+// Linea del tempo con le voci
+function creaLineaTempo(titolo, righe) {
+  const sezione = document.createElement("section");
+  sezione.className = "cv-tempo";
+
+  const h2 = document.createElement("h2");
+  h2.className = "titolo-sezione";
+  h2.textContent = titolo;
+  sezione.appendChild(h2);
+
+  const linea = document.createElement("div");
+  linea.className = "cv-linea";
+  righe.forEach(function (riga) {
+    linea.appendChild(creaVoce(riga));
+  });
+  sezione.appendChild(linea);
+
+  return sezione;
+}
+
+// Legge il foglio e crea tessera + linee del tempo
 Papa.parse(URL_CV, {
   download: true,
-  header: true,          // la prima riga contiene i nomi delle colonne
+  header: true,
   skipEmptyLines: true,
+  // Nomi delle colonne senza spazi e in minuscolo
+  transformHeader: function (nome) {
+    return nome.trim().toLowerCase();
+  },
   complete: function (risultato) {
-    risultato.data.forEach(function (riga) {
-      // Leggo la colonna "sezione" (tolgo spazi e maiuscole)
-      const sezione = (riga.sezione || "").trim().toLowerCase();
-      const blocco = document.querySelector("#" + sezione + " .contenuto");
-      if (!blocco) return; // sezione sconosciuta: salto la riga
+    const righe = risultato.data;
 
-      if (sezione === "dati") {
-        mostraDato(riga, blocco);
-      } else {
-        mostraVoce(riga, blocco);
-      }
-    });
+    // Leggo la sezione senza spazi e in minuscolo
+    function sezioneDi(riga) {
+      return pulisci(riga.sezione).toLowerCase();
+    }
+
+    // Divido le righe in base alla colonna "sezione"
+    const dati = righe.filter(function (r) { return sezioneDi(r) === "dati"; });
+    const istruzione = righe.filter(function (r) { return sezioneDi(r) === "istruzione"; });
+    const esperienze = righe.filter(function (r) { return sezioneDi(r) === "esperienza"; });
+
+    // Un blocco si crea solo se ha delle righe
+    if (dati.length > 0) {
+      contenitore.appendChild(creaTessera(dati));
+    }
+    if (istruzione.length > 0) {
+      contenitore.appendChild(creaLineaTempo("Istruzione", istruzione));
+    }
+    if (esperienze.length > 0) {
+      contenitore.appendChild(creaLineaTempo("Esperienze di lavoro", esperienze));
+    }
+
+    if (contenitore.children.length === 0) {
+      // Messaggio con i nomi trovati, utile per capire l'errore
+      const colonne = (risultato.meta.fields || []).join(", ");
+      contenitore.textContent =
+        "Non trovo dati nel tab CV del foglio. Colonne lette: " + colonne;
+    }
   },
   error: function () {
-    document.querySelector("main").textContent = "Impossibile caricare i dati del CV.";
+    contenitore.textContent = "Non riesco a leggere il foglio.";
   }
 });

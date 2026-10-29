@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Extra</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Stili nuovi solo per la pagina Extra -->
+  <link rel="stylesheet" href="extra.css">
+</head>
+<body>
+
+  <!-- Menu: uguale in tutte le pagine -->
+  <nav class="menu">
+    <a href="index.html">Home</a>
+    <a href="cv.html">CV</a>
+    <a href="stage.html">Stage</a>
+    <a href="extra.html" class="attivo">Extra</a>
+  </nav>
+
+  <main>
+    <!-- Titolo e introduzione: arrivano dalla riga "pagina" del foglio -->
+    <h1 id="titolo-pagina" hidden></h1>
+    <p id="intro-pagina" class="extra-intro" hidden></p>
+
+    <!-- Le card dei lavori -->
+    <section>
+      <div id="extra-lista" class="griglia"></div>
+    </section>
+  </main>
+
+  <!-- Footer: sostituisci i dati tra parentesi quadre con i tuoi (uguale alla Home) -->
+  <footer class="footer-contatti">
+    <div>
+      <p>Indirizzo: [Via Padova, 78]</p>
+      <p>Email: [jin.hu@edu.immaginazioneelavoro.it]</p>
+      <p>Cellulare: [+39 3291367185]</p>
+    </div>
+    <img src="Img/Immaginazione%20e%20Lavoro.webp" alt="Logo Immaginazione e Lavoro" class="logo-footer">
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="extra.js"></script>
+
+</body>
+</html>

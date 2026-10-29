@@ -1,0 +1,239 @@
+/* ===== PAGINA EXTRA: la bacheca dei lavori ===== */
+/* (si può anche copiare in fondo a style.css e togliere il link a extra.css) */
+
+/* --- Titolo: tre stelline sotto --- */
+#titolo-pagina::after {
+  content: "\2605  \2605  \2605";
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font);
+  font-size: 1rem;
+  letter-spacing: 0.3em;
+  color: var(--accento);
+  text-shadow: none;
+}
+
+/* --- Introduzione: nota adesiva inclinata --- */
+.extra-intro {
+  position: relative;
+  max-width: 520px;
+  margin: 28px auto 8px;
+  padding: 18px 26px;
+  text-align: center;
+  font-family: var(--font-titoli);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  color: var(--accento-2);
+  background: #f7dfe5;
+  border: 2px solid var(--accento-2);
+  box-shadow: 6px 6px 0 var(--accento-2);
+  transform: rotate(-1.5deg);
+}
+
+/* Piccola puntina sopra la nota */
+.extra-intro::before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  transform: translateX(-50%);
+  background: var(--accento);
+  border: 3px solid var(--accento-2);
+  border-radius: 50%;
+}
+
+/* --- La bacheca: più spazio tra le card, contatore dei lavori --- */
+#extra-lista {
+  gap: 52px 34px;
+  padding-top: 26px;
+  counter-reset: lavoro;
+}
+
+/* --- Card come foto appesa al muro --- */
+.card-extra {
+  position: relative;
+  counter-increment: lavoro;
+  padding-bottom: 4px;
+}
+
+/* Nastro adesivo in alto */
+.card-extra::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: -15px;
+  left: 50%;
+  width: 96px;
+  height: 28px;
+  transform: translateX(-50%) rotate(-3deg);
+  background: rgba(123, 30, 58, 0.35);
+  border: 1px dashed var(--accento-2);
+}
+
+/* Bollino col numero del lavoro (01, 02, 03...) */
+.card-extra::after {
+  content: counter(lavoro, decimal-leading-zero);
+  position: absolute;
+  z-index: 3;
+  top: -22px;
+  right: -14px;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  font-family: var(--font-titoli);
+  font-weight: 900;
+  font-size: 1.15rem;
+  color: var(--sfondo);
+  background: var(--accento);
+  border: 2px solid var(--accento-2);
+  border-radius: 50%;
+  box-shadow: 3px 3px 0 var(--accento-2);
+  transform: rotate(10deg);
+}
+
+/* Immagine come foto con cornice */
+.card-extra .card-img {
+  width: calc(100% - 28px);
+  height: 210px;
+  margin: 18px 14px 0;
+  border: 2px solid var(--accento-2);
+  filter: saturate(0.85);
+  transition: filter 0.3s;
+}
+
+.card-extra:hover .card-img {
+  filter: saturate(1.15);
+}
+
+/* Categoria: bollino che "scavalca" il bordo della foto */
+.card-categoria {
+  align-self: flex-start;
+  margin: -16px 0 0 24px;
+  position: relative;
+  z-index: 2;
+  padding: 4px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sfondo);
+  background: var(--accento);
+  border: 2px solid var(--accento-2);
+  box-shadow: 3px 3px 0 var(--accento-2);
+  transform: rotate(-3deg);
+}
+
+/* Se non c'è la foto, la categoria non deve salire sul bordo */
+.card-categoria:first-child {
+  margin-top: 28px;
+}
+
+/* Titolo con l'evidenziatore */
+.card-extra .card-titolo {
+  display: inline;
+  align-self: flex-start;
+  margin: 16px 20px 6px;
+  padding: 0 6px;
+  font-size: 1.6rem;
+  background: linear-gradient(transparent 58%, rgba(123, 30, 58, 0.22) 58%);
+}
+
+/* Il titolo (inline) va in un blocco a parte, il testo si allunga */
+.card-extra {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-extra .card-testo {
+  flex: 1;
+  margin-top: 8px;
+}
+
+/* --- Pulsante "Apri" con freccia --- */
+.pulsante {
+  align-self: flex-start;
+  margin: 0 20px 22px;
+  padding: 8px 20px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--accento-2);
+  background: var(--carta);
+  border: 2px solid var(--accento-2);
+  box-shadow: 4px 4px 0 var(--accento-2);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
+}
+
+.pulsante::after {
+  content: " \2197";
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.pulsante:hover {
+  color: var(--sfondo);
+  background: var(--accento);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--accento-2);
+}
+
+.pulsante:hover::after {
+  transform: translate(3px, -3px);
+}
+
+/* --- Tre stili che si alternano --- */
+
+/* Seconda card: rosa chiaro */
+.card-extra:nth-child(3n + 2) {
+  background: #f7dfe5;
+}
+
+/* Terza card: bordeaux scuro con testo chiaro */
+.card-extra:nth-child(3n) {
+  background: var(--accento-2);
+  box-shadow: 7px 7px 0 var(--accento);
+}
+
+.card-extra:nth-child(3n) .card-titolo {
+  color: var(--sfondo);
+  background: linear-gradient(transparent 58%, rgba(250, 246, 246, 0.25) 58%);
+}
+
+.card-extra:nth-child(3n) .card-testo {
+  color: var(--bordo);
+}
+
+.card-extra:nth-child(3n) .card-img {
+  border-color: var(--sfondo);
+}
+
+.card-extra:nth-child(3n) .card-categoria {
+  color: var(--accento-2);
+  background: var(--sfondo);
+  border-color: var(--sfondo);
+  box-shadow: 3px 3px 0 var(--accento);
+}
+
+.card-extra:nth-child(3n) .pulsante {
+  color: var(--sfondo);
+  background: transparent;
+  border-color: var(--sfondo);
+  box-shadow: 4px 4px 0 var(--accento);
+}
+
+.card-extra:nth-child(3n) .pulsante:hover {
+  color: var(--accento-2);
+  background: var(--sfondo);
+}
+
+/* Telefono: la nota adesiva non deve toccare i bordi */
+@media (max-width: 560px) {
+  .extra-intro {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+}
